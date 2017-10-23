@@ -10,10 +10,7 @@ require_once("func/datosConexion.php");
 require_once("func/funcConexion.php");
 require_once("func/funcConsultas.php");
 require_once("func/funcSesiones.php");
-//require_once("func/funcUsuarios.php");
-//require_once("func/funcRegistro.php");
 require_once("func/funcPaginas.php");
-//require_once("func/funcProductos.php");
 require_once("admin/func/funcAdmin.php");
 
 //Incluimos los módulos html
@@ -31,4 +28,4 @@ visualizarContenido();
 //Incluimos resto de módulos html
 require_once("mod/footer.php");
 
-?>	
+?>

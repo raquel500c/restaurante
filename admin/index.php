@@ -26,24 +26,22 @@ require_once ( "func/funcAdmin.php" );
 if ( usuarioConectado() ) {
 	//Comprobación de si tiene privilegios para estar aquí
 	if ( usuarioEsAdmin() || usuarioEsTrabajador() ) {
-		$usuarioAutorizado = true;	
-	}
-	else {
+		$usuarioAutorizado = true;
+	} else {
 		//usuario conectado como cliente
-		$usuarioAutorizado = false;	
-		
+		$usuarioAutorizado = false;
+
 		echo "<p>" . $_SESSION [ "nombre" ] . ". NO TIENES PRIVILEGIOS PARA ESTAR AQUÍ.</p>
 			 <img src=\"images/pistolero.jpg\" alt=\"Pistolero\"/>
 			 <p>¡FUERA!</p>";
-		 }
-}
-else {
+	}
+} else {
 	//si se trata de acceder desde el navegador a la url de admin sin estar conectado
 	$usuarioAutorizado = false;
 	// Redirigimos a la página login para que no se entre sin logearse en restaurante
-	header( 'Location:http://localhost/restaurante/index.php?p=login'  ); 
+	header( 'Location:http://localhost/restaurante/index.php?p=login'  );
 
-	exit; // Evitamos que se siga ejecutando código de ésta página 
+	exit; // Evitamos que se siga ejecutando código de ésta página
 }
 ?>
 
@@ -55,7 +53,7 @@ else {
 				<li><a href="index.php?opcion=pedidos">Pedidos</a></li>
 				<li><a href="index.php?opcion=usuarios">Gestión de usuarios</a></li>
 				<li><a href="cerrarSesion.php">Cerrar sesion</a></li>
-				<?php endif ?>	
+				<?php endif ?>
 			</ul>
 		</nav>
 		<div id="contenedor">
@@ -80,15 +78,12 @@ else
 		default:
 			$pagina = "404";
 	}
-		
+
 	require_once ("func/funcAdmin$pagina.php");
-	if ( $usuarioAutorizado ) visualizarContenido();	
-	
+	if ( $usuarioAutorizado ) visualizarContenido();
+
 ?>
 
 		</div>
 	</body>
 </html>
-
-
-

@@ -1,7 +1,7 @@
-* {	
-margin:0px;
-padding:0px;
-box-sizing:border-box;
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
 
 body {
@@ -22,7 +22,7 @@ td {
 }
 
 nav {
-  background-color: #000; 
+  background-color: #000;
   color: #FFF;
 }
 
@@ -43,20 +43,23 @@ nav ul li {
 
 #contenedor {
   width: 80%;
-  max-width: 960px;       
+  max-width: 960px;
   margin: auto;
   padding: 30px;
 }
+
 .boton {
-  color: white; 
-  background-color: #003d91; 
-  border-radius: 3px; 
-  padding: 10px; 
+  color: white;
+  background-color: #003d91;
+  border-radius: 3px;
+  padding: 10px;
   text-decoration: none;
 }
+
 .exito {
-  color:green;
+  color: green;
 }
+
 .error {
   color: red;
 }
@@ -73,6 +76,3 @@ nav ul li {
   width: 80px;
   text-align: center;
 }
-
-
-

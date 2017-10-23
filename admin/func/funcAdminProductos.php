@@ -20,12 +20,12 @@ function visualizarContenido() {
 function procEditarProducto() {
 	//Todos los datos recibidos por POST los mete en una consulta del tipo UPDATE y la ejecuta
 	$consulta = "
-		UPDATE productos SET 
-		nombre_prod='" . $_POST["nombre"] . "', 
+		UPDATE productos SET
+		nombre_prod='" . $_POST["nombre"] . "',
 		descripcion='" . $_POST["descripcion"] . "',
 		precio_prod='" . $_POST["precio"] . "',
 		ruta_imagen='" . $_POST["imagen"] . "',
-		is_active='" . $_POST["activo"] . "' 
+		is_active='" . $_POST["activo"] . "'
 		WHERE id_prod='" . $_POST["id"] . "';
 		";
 
@@ -37,11 +37,11 @@ function procEditarProducto() {
 
 function procAgregarProducto() {
 	//Todos los datos recibidos por POST los mete en una consulta del tipo INSERT y la ejecuta
-	$consulta = " 
+	$consulta = "
 		INSERT INTO productos ( nombre_prod,descripcion,precio_prod,ruta_imagen,is_active )
 	 	VALUES ( '" . $_POST["agregarNombre"] . "', '" . $_POST["descripcion"] . "', '" . $_POST["precio"] . "',
 	 			 '" . $_POST["imagen"] . "', '" . $_POST["activo"] . "' )";
-	
+
 	if ( consultar( $consulta ) )
 		echo "<p class=\"exito\">" . $_POST["agregarNombre"] . " ha sido insertado con éxito.</span>";
 	else
@@ -77,8 +77,8 @@ function formAgregarProducto() {
 		</table>
 		<input type=\"Submit\" value=\"Agregar producto\">
 		</form>
-		";	
-	
+		";
+
 }
 
 
@@ -118,7 +118,7 @@ function formEditarProducto( $producto ) {
 		</table>
 		<input type=\"Submit\" value=\"Guardar modificaciones\">
 		</form>
-		";	
+	";
 }
 
 
@@ -126,14 +126,14 @@ function mostrarListadoProductos() {
 	echo "
 		<h1>Productos disponibles</h1>
 		<br/>
-		";
+	";
 	if ( usuarioEsAdmin() )
 	echo "	<p><a class=\"boton\" href=\"index.php?opcion=productos&id=agregar\">Agregar producto</a></p>
-		<br/>	
-		";
-	
+		<br/>
+	";
+
 	$resultado = consultar( "SELECT * FROM productos" );
-	
+
 	echo "
 		<table>
 		<thead>
@@ -143,13 +143,13 @@ function mostrarListadoProductos() {
 		<td>Precio</td>
 		<td>Imagen</td>
 		<td>Activo</td>
-		";
+	";
 
 	if ( usuarioEsAdmin() )
 		echo "<td></td>";
-	
+
 	echo "</thead>";
-	
+
 	while ( $plato = mysqli_fetch_array( $resultado, MYSQLI_ASSOC ) ) {
 		echo "
 			<tr>
@@ -159,18 +159,18 @@ function mostrarListadoProductos() {
 			<td>" . $plato["precio_prod"] . "€</td>
 			<td><img class=\"producto\" src=\"../images/" . $plato["ruta_imagen"] . "\" alt=\"imagen\" /></td>
 			<td>"; if ( $plato["is_active"] == 1 ) echo "sí"; else echo "no"; echo"</td>
-			";
+		";
 
 			if ( usuarioEsAdmin() )
 				echo "<td><a class=\"boton\" href=\"index.php?opcion=productos&id=" . $plato["id_prod"] . "\">Editar</a></td>";
-			
+
 		echo "
 			</tr>
-			";
+		";
 	}
 	echo "
 		</table>
-		";
+	";
 
 }
 

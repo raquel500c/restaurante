@@ -1,25 +1,16 @@
-<?php 
+<?php
 
 /*** Esta función gestiona el contenido a visualizar y todas las operaciones relacionadas con los productos y el carrito de la compra ***/
 function visualizarContenido() {
- 	/*echo '$_SESION: ';
-	var_dump($_SESSION);
-	echo '<br/>$_POST: ';
-	var_dump($_POST);
-	echo '<br/>$_GET: ';
-	var_dump($_GET);
-	echo '<br/>';*/
-	
 	//efectua una operación según variable GET "id" recibida
 	if ( isset( $_GET["id"] ) ) {
-
 		switch ($_GET["id"]) {
 		 	case 'agregar': // ENVÍA DATOS por post
 		 		incluirEnCarrito();
 		 		break;
 		 	case 'modificar': //ENVÍA DATOS por post
 		 		modificarCarrito();
-		 		break;		 	
+		 		break;
 		 	case 'procesar':
 		 		procPedido();
 		 		break;
@@ -28,27 +19,26 @@ function visualizarContenido() {
 		 		break;
 		 	default:
 		 		eliminarDeCarrito();
-		 		break;	
+		 		break;
 		}
-
-	} 
+	}
 
 	//muestra contenido según variable get "ver"
-	if ( isset( $_GET["carrito"] ) ) 
+	if ( isset( $_GET["carrito"] ) )
 		mostrarListadoCarrito(); //get
 	else
-	 	mostrarListadoProductos();	//get sin ver solo p=productos		
+	 	mostrarListadoProductos();	//get sin ver solo p=productos
 
 	echo '	<footer id="main-footer">';//apertura footer
 
-} 
+}
 
 
 /*Esta función procesa el pedido. Agrega en las tablas pedidos y productos_pedido de la BBDD los datos del pedido */
 function procPedido() {
 	//si no está conectado se indica que debe hacerlo para poder procesar pedido
 	if (usuarioConectado()) {
-		
+
 		//obtenemos id_usuario almacenado en sesión
 		$idUsuario = $_SESSION["id_usuario"];
 		//insertamos en tabla pedidos, la consulta insert devuelve el id autoincrement insertado  por la bbdd para el registro
@@ -62,19 +52,19 @@ function procPedido() {
 				$cantidad = $linea["cantidad"];
 				//insertamos en tabla productos_pedido
 				$resultado = consultar( "INSERT INTO productos_pedido( id_pedido, id_prod, precio_venta, cantidad)
-								 VALUES( $id_pedido, $id_prod, $precio_prod ,$cantidad )" );				
+								 VALUES( $id_pedido, $id_prod, $precio_prod ,$cantidad )" );
 			}
 
 			//eliminamos carrito
 			unset( $_SESSION["carrito"] );
 			print "<script>alert('Venta procesada exitosamente')</script>";
-		} else 		
+		} else
 			print "<script>alert('Se ha producido un problema al registrar su pedido. Por favor, inténtelo de nuevo')</script>";
 	} else	{
 		echo "
 			<script>
 				alert('Debe conectarse a su cuenta para hacer el pedido');
-				window.location='index.php?p=login';		
+				window.location='index.php?p=login';
 			</script>
 		";
 	}
@@ -113,7 +103,7 @@ function mostrarListadoCarrito(){
 			<div class="col-md-12">
 				<h1>Carrito</h1>
 	';
-				//agregamos un enlace para ir a productos
+	//agregamos un enlace para ir a productos
 	echo '
 				<a href="index.php?p=productos" class="btn btn-default"> Productos</a>
 				<br><br>
@@ -124,21 +114,21 @@ function mostrarListadoCarrito(){
 		//creamos comienzo tabla y encabezados
 		echo '
 				<table class="table table-bordered">
-					<thead>						
+					<thead>
 						<th>Producto</th>
 						<th>Precio</th>
-						<th>Cantidad</th>					
+						<th>Cantidad</th>
 						<th>Total</th>
-						<th></th>						
+						<th></th>
 					</thead>';
 		//recorremos lineas del carrito y mostramos datos de cada producto
 		foreach( $_SESSION["carrito"] as $linea ) {
-			echo "	<tr>						
+			echo "	<tr>
 						<td>" . $linea["nombre_prod"] . "</td>
 						<td>" . $linea["precio_prod"] . " €</td>
 						<th>
-						<form action='index.php?p=productos&carrito&id=modificar' method='POST'>	
-						<input type='hidden' name='id_prod' value='" . $linea["id_prod"] . "' />					
+						<form action='index.php?p=productos&carrito&id=modificar' method='POST'>
+						<input type='hidden' name='id_prod' value='" . $linea["id_prod"] . "' />
 						<input type='number' name='modCantidad' min='1' max='10' value='". $linea["cantidad"] ."' />
 						<input type='submit' value='modificar' />
 						</form>
@@ -146,25 +136,25 @@ function mostrarListadoCarrito(){
 			";
 			//calculamos el precio total por cada producto y lo mostramos
 			$total = $linea["cantidad"] * $linea["precio_prod"];
-			echo "		
+			echo "
 						<td>". $total . " €</td>
 						<td >
 			";
 						//creamos un enlace para eliminar cada producto  si se desea
 			echo "		<a href=\"index.php?p=productos&carrito&id=" . $linea["id_prod"] . "\" class=\"btn btn-danger\">Eliminar</a>
 						</td>
-						
+
 					</tr>
 			";
-		} 
+		}
 		//fuera del foreach cerramos tabla y añadimos un formulario de envío de datos para procesar pedido
 		echo '	</table>
-		
+
 				<form class=\"form-horizontal\" method="POST" action="index.php?p=productos&id=procesar">
 						<div class="form-group">
-							
+
 							<div class="col-sm-5">
-								
+
 							</div>
 						</div>
 							<div class="form-group">
@@ -174,11 +164,11 @@ function mostrarListadoCarrito(){
 						</div>
 					</form>
 		';
-	//si no hay producto indicamos que el carrito está vacío	
-	} else 
+	//si no hay producto indicamos que el carrito está vacío
+	} else
 		echo '<p class="alert alert-warning">El carrito esta vacio.</p>';
 	//cierre de contenedores
-	echo'	
+	echo'
 			<br><br><hr>
 			</div>
 		</div>
@@ -208,7 +198,7 @@ function incluirEnCarrito() {
 
 		//Al tratarse de un SELECT, la consulta devolverá un array $resultado con un registro
 		if( mysqli_num_rows( $resultado ) == 1 ) {
-			//almacenamos datos del producto 
+			//almacenamos datos del producto
 			$fila = mysqli_fetch_array( $resultado, MYSQLI_ASSOC ) ;
 			$nombre_prod = $fila["nombre_prod"];
 			$precio_prod = $fila["precio_prod"];
@@ -220,23 +210,23 @@ function incluirEnCarrito() {
 			if (@array_key_exists ( $clave, $_SESSION["carrito"] ) ) {
 			//almacenamos en variable la cantidad que hay en carrito
 			$cantidadCarrito = $_SESSION["carrito"] ["$clave"] ["cantidad"];
-			//sumamos cantidades del carrito y de la nueva petición	
+			//sumamos cantidades del carrito y de la nueva petición
 			$Suma =  $cantidadCarrito + $cantidad;
 			//actualizamos cantidad en carrito para ese registro, con variable casteada a string
-			$_SESSION["carrito"] [$clave] ["cantidad"] = (string)$Suma;		
-	
+			$_SESSION["carrito"] [$clave] ["cantidad"] = (string)$Suma;
+
 			}else {
-			// si el producto no esta todavía en carrito entonces simplemente agregamos un nuevo registro completo con su clave 
+			// si el producto no esta todavía en carrito entonces simplemente agregamos un nuevo registro completo con su clave
 			$_SESSION["carrito"] [$clave] = array( "id_prod"=>$id_prod, "nombre_prod"=>$nombre_prod, "precio_prod"=>$precio_prod,
 			"cantidad"=>$cantidad  ) ;
-			}			
+			}
 		}
 	}
 }
 
 
 /*** Esta función genera estructura de página productos con datos extraidos de la BBDD ***/
-function mostrarListadoProductos() { 
+function mostrarListadoProductos() {
  	//apertura de contenedores y título de página
  	echo '
 	<div class="container">
@@ -245,14 +235,7 @@ function mostrarListadoProductos() {
 				<h1>Productos</h1>
 	';
 
-	/*si el usuario está conectado se le nombra					
-	if ( usuarioConectado() ){
-		
-		echo '<p class="alert alert-warning">' .$_SESSION["nombre"] .' puedes hacer tu pedido:</p>';
-				
-	}*/	
-	
-	//agregamos enlace para ver el contenido del carrito y cierre de contenedores	
+	//agregamos enlace para ver el contenido del carrito y cierre de contenedores
 	echo '
 				<a href="index.php?p=productos&carrito" class="btn btn-warning">Ver Carrito</a>
 			</div>
@@ -263,11 +246,11 @@ function mostrarListadoProductos() {
 	//obtenemos de BBDD todos los productos
  	$resultado = consultar( "SELECT * FROM productos" );
  	//recorremos todas las filas de productos
- 	while ( $fila = mysqli_fetch_array( $resultado, MYSQLI_ASSOC ) ) { 
+ 	while ( $fila = mysqli_fetch_array( $resultado, MYSQLI_ASSOC ) ) {
  	//mostramos datos para cada producto
 	 	echo  '
 		<div class="responsive">
-		  	<div class="img">						
+		  	<div class="img">
 			  	<img src="/restaurante/images/' . $fila["ruta_imagen"] . '" alt="'
 						. $fila["nombre_prod"] . '" width="300" height="300">
 				<div class="desc">'. $fila["nombre_prod"] . '</div>
@@ -275,24 +258,17 @@ function mostrarListadoProductos() {
 
 	/*incluimos form por cada producto para enviar cantidad a agregar al carrito
 				junto  al id del producto oculto*/
-	echo  '			
+	echo  '
 				<form  method="POST" action="index.php?p=productos&id=agregar">
 					<input type="hidden" name="id_prod" value="' . $fila["id_prod"] . '">
 			  		<div class="form-group">
 				    	<input type="number" name="cantidad" min="1" max="10" value=1 required>
 				    	<button type="submit" id="btn-agregar" class="btn btn-primary">Agregar al Carrito</button>
-				 	</div>				  	
+				 	</div>
 				</form>
 			</div>
-		</div>';	
+		</div>';
 	} //endwhile
-
- 	//Finalizado el bucle incluimos un div clearfix
- 	/*echo '				
-				
-	/*<div class="clearfix"></div>				
-
-	';*/ 
-} 
+}
 
 ?>

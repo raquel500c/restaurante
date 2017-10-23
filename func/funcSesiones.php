@@ -9,8 +9,8 @@ function usuarioConectado() {
 
 //cierra sesión actual y redirige a home
 function logout() {
-unset ( $SESSION ['id_usuario'] );
-session_destroy();
-header( 'Location:http://localhost/restaurante/index.php' );
+	unset ( $SESSION ['id_usuario'] );
+	session_destroy();
+	header( 'Location:http://localhost/restaurante/index.php' );
 } //endLogout
 ?>

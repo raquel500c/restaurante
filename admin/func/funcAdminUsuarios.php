@@ -21,19 +21,19 @@ function visualizarContenido() {
 function procEditarUsuario() {
 	//Todos los datos recibidos por POST los mete en una consulta del tipo UPDATE y la ejecuta
 	$consulta = "
-	UPDATE usuarios SET 
+	UPDATE usuarios SET
 	nombre='" . $_POST["nombre"] . "',
 	apellidos='" . $_POST["apellidos"] . "',
 	telefono='" . $_POST["telefono"] . "',
 	email='" . $_POST["email"] . "',
 	direccion='" . $_POST["direccion"] . "',
 	cod_postal=" . $_POST["codigoPostal"] . ",
-	municipio='" . $_POST["municipio"] . "', 
-  	provincia='" . $_POST["provincia"] . "',
-  	rol=" . $_POST["rol"] . ",
-  	is_active=" . $_POST["activo"] . "
-  	WHERE id_usuario=" . $_POST["id"];  
-  
+	municipio='" . $_POST["municipio"] . "',
+	provincia='" . $_POST["provincia"] . "',
+	rol=" . $_POST["rol"] . ",
+	is_active=" . $_POST["activo"] . "
+	WHERE id_usuario=" . $_POST["id"];
+
 	if ( consultar( $consulta ) )
 		echo "<p class=\"exito\" >El usuario ". $_POST["nombre"] . " ". $_POST["apellidos"] . " ha sido modificado con éxito.</span>";
 	else
@@ -56,8 +56,8 @@ function procAgregarUsuario() {
 	provincia,
 	rol,
 	is_active
-	) 
-	VALUES( 
+	)
+	VALUES(
 	'" . $_POST["agregarNombre"] . "',
 	'" . $_POST["apellidos"] . "',
 	'" . $_POST["telefono"] . "',
@@ -124,20 +124,20 @@ function agregarUsuario() {
 			<tr>
 			<td>Tipo</td>
 			<td>
-				<input type=\"radio\" name=\"rol\" value=\"1\" />Administrador 
-				<input type=\"radio\" name=\"rol\" value=\"2\" checked />Trabajador 
-				<input type=\"radio\" name=\"rol\" value=\"3\" />Cliente				
+				<input type=\"radio\" name=\"rol\" value=\"1\" />Administrador
+				<input type=\"radio\" name=\"rol\" value=\"2\" checked />Trabajador
+				<input type=\"radio\" name=\"rol\" value=\"3\" />Cliente
 			</td>
 		</tr>
 		<tr>
 			<td>¿Activo?</td>
-			<td><input type=\"radio\" name=\"activo\" value=\"1\" checked/>Sí 
+			<td><input type=\"radio\" name=\"activo\" value=\"1\" checked/>Sí
 			<input type=\"radio\" name=\"activo\" value=\"0\"  />No </td>
 		</tr>
 		</table>
 			<input type=\"Submit\" value=\"Crear usuario\">
 		</form>
-		";	
+	";
 }
 
 
@@ -188,24 +188,24 @@ function editarUsuario( $usuario ) {
 		<tr>
 			<td>Tipo</td>
 			<td><input type=\"radio\" name=\"rol\" value=\"1\" "; if ( $usuario["rol"] == 1 ) echo "checked";
-			echo" />Administrador 
+			echo" />Administrador
 			<input type=\"radio\" name=\"rol\" value=\"2\" "; if ( $usuario["rol"] == 2 ) echo "checked";
-			echo" />Trabajador 
+			echo" />Trabajador
 			<input type=\"radio\" name=\"rol\" value=\"3\" "; if ( $usuario["rol"] == 3 ) echo "checked";
-			echo" />Cliente				
+			echo" />Cliente
 			</td>
 		</tr>
 		<tr>
 			<td>¿Activo?</td>
 			<td><input type=\"radio\" name=\"activo\" value=\"1\" "; if ( $usuario["is_active"] == 1 ) echo "checked";
-			echo" />Sí 
+			echo" />Sí
 			<input type=\"radio\" name=\"activo\" value=\"0\" "; if ( $usuario["is_active"] == 0 ) echo "checked";
 			echo" />No </td>
 		</tr>
 		</table>
 		<input type=\"Submit\" value=\"Guardar modificaciones\">
 		</form>
-		";	
+	";
 }
 
 
@@ -213,15 +213,15 @@ function mostrarListadoUsuarios() {
 	echo "
 		<h1>Usuarios registrados</h1>
 		<br/>
-		";
+	";
 	if ( usuarioEsAdmin() )
 	echo "
 		<p><a class=\"boton\" href=\"index.php?opcion=usuarios&id=agregar\">Agregar usuario</a></p>
-		<br/>	
-		";	
-	
+		<br/>
+	";
+
 	$resultado = consultar( "SELECT * FROM usuarios" );
-	
+
 	echo "
 		<table>
 		<thead>
@@ -231,13 +231,13 @@ function mostrarListadoUsuarios() {
 		<td>Rol</td>
 		<td>Email</td>
 		<td>Activo</td>
-		";
+	";
 
 	if ( usuarioEsAdmin() )
 		echo "<td></td>";
-	
+
 	echo "</thead>";
-	
+
 	while( $usuario = mysqli_fetch_array( $resultado, MYSQLI_ASSOC ) ) {
 		echo "
 			<tr>
@@ -247,19 +247,19 @@ function mostrarListadoUsuarios() {
 			<td>" . rolUsuario($usuario["rol"]) . "</td>
 			<td>" . $usuario["email"] . "</td>
 			<td>"; if ( $usuario["is_active"] == 1 ) echo "sí"; else echo "no"; echo "</td>
-			";
+		";
 
 		if ( usuarioEsAdmin() )
 			echo "
 			<td><a class=\"boton\" href=\"index.php?opcion=usuarios&id=" . $usuario["id_usuario"] . "\">Editar</a></td>
-			";			
+			";
 			echo "
 			</tr>
-			";
+		";
 	}
 	echo "
 		</table>
-		";
+	";
 }
 
 
